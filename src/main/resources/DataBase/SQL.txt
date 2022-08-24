@@ -1,0 +1,309 @@
+1CREATE TABLE ROOT.USERSB 
+(
+  USER_ID INT NOT NULL 
+, USERNAME VARCHAR2(20) NOT NULL 
+, PASSWORD VARCHAR2(20) NOT NULL 
+, ROLE VARCHAR2(20) NOT NULL 
+, AGE VARCHAR2(20) NOT NULL 
+, EMAIL VARCHAR2(20) NOT NULL 
+, PHONE VARCHAR2(20) NOT NULL 
+, BLOODGROUP VARCHAR2(20) NOT NULL 
+, ELIGIBILITY VARCHAR2(20) 
+, LASTBLOOD VARCHAR2(20) 
+, CONSTRAINT USERSB_PK PRIMARY KEY 
+  (
+    USER_ID 
+  )
+  ENABLE 
+);
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO "ROOT"."USERSB" (USER_ID, USERNAME, PASSWORD, ROLE, AGE, EMAIL, PHONE, BLOODGROUP, ELIGIBILITY) VALUES ('101', 'DEBORAJ', '12345', 'Donor', '22', 'deboraj@email.com', '01708119559', 'B+', 'YES')
+INSERT INTO "ROOT"."USERSB" (USER_ID, USERNAME, PASSWORD, ROLE, AGE, EMAIL, PHONE, BLOODGROUP, ELIGIBILITY) VALUES ('102', 'ABUR RAHMAN', '09876', 'Patient', '23', 'abdur@email.com', '01709119449', 'A+', 'YES')
+
+Commit Successful
+
+
+INSERT INTO "ROOT"."BLOODS" (BLOOD_ID, DONOR_ID, PLATELETCOUNT, HAEMOGLOBIN, LYMPHOCYTES) VALUES ('101', '102', '155', '15', '20')
+INSERT INTO "ROOT"."BLOODS" (BLOOD_ID, DONOR_ID, PLATELETCOUNT, HAEMOGLOBIN, LYMPHOCYTES) VALUES ('102', '102', '151', '17', '23')
+
+Commit Successful
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+package org.example.view.utilities;
+
+import org.example.controller.DonorController;
+import org.example.model.entities.User;
+import org.example.view.Profile;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+
+public class EditProfile {
+    private int yValue = 20;
+    private static final int boxHeight = 30;
+    private static final int boxWidth = 200;
+    private static final String bgVal [] = {"A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-", "AB-"};
+
+    public EditProfile(User user) {
+
+        Frame editProfileFrame = new Frame();
+
+        JLabel editProfile = editProfileFrame.getLabel("Edit Profile...", 20, yValue, 70, 70);
+        editProfileFrame.add(editProfile);
+
+/*        JLabel username = editProfileFrame.getLabel("Username", 20, shiftYValue(), 70, 70);
+        editProfileFrame.add(username);
+
+        JTextField userTB = editProfileFrame.getTextField(120, yValue + 20, boxWidth, boxHeight);
+        userTB.setText(user.getUserName());
+        editProfileFrame.add(userTB);*/
+
+        JLabel age = editProfileFrame.getLabel("Age", 20, shiftYValue(), 70, 70);
+        editProfileFrame.add(age);
+
+        JTextField ageTB = editProfileFrame.getTextField(120, yValue + 20, boxWidth, boxHeight);
+        ageTB.setText(user.getAge());
+        editProfileFrame.add(ageTB);
+
+        JLabel email = editProfileFrame.getLabel("Email: ", 20, shiftYValue(), 70, 70);
+        editProfileFrame.add(email);
+
+        JTextField emailTB = editProfileFrame.getTextField(120, yValue + 20, boxWidth, boxHeight);
+        emailTB.setText(user.getEmail());
+        editProfileFrame.add(emailTB);
+
+        JLabel phone = editProfileFrame.getLabel("Phone: ", 20, shiftYValue(), 70, 70);
+        editProfileFrame.add(phone);
+
+        JTextField phoneTB = editProfileFrame.getTextField(120, yValue + 20, boxWidth, boxHeight);
+        phoneTB.setText(user.getPhone());
+        editProfileFrame.add(phoneTB);
+
+        JLabel bloodgroup = editProfileFrame.getLabel("Blood Group: ", 20, shiftYValue(), 100, 70);
+        editProfileFrame.add(bloodgroup);
+
+        System.out.println(user.getBg()+" "+);
+        System.out.println(user.getBg()+" "+);
+
+        JComboBox bloodTB = new JComboBox(bgVal);
+        bloodTB.setBounds(120, yValue + 20, boxWidth, boxHeight);
+        bloodTB.setSelectedItem(user.getBg());
+        editProfileFrame.add(bloodTB);
+
+        JButton submitButton = editProfileFrame.getButton("Update", 140, yValue + 200, boxWidth, boxHeight);
+        editProfileFrame.add(submitButton);
+
+        JButton backButton = editProfileFrame.getButton("Back", 140, yValue + 300, boxWidth, boxHeight);
+        editProfileFrame.add(backButton);
+
+
+
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                DonorController donorController = new DonorController();
+
+                donorController.updateUser(ageTB.getText(), emailTB.getText(), phoneTB.getText(), bloodTB.getSelectedItem().toString());
+
+                User updateUser = donorController.getUserByName(user.getUserName());
+
+                updateUser.setUserName(user.getUserName());
+
+                editProfileFrame.dispose();
+
+                new Profile(updateUser);
+            }
+        });
+
+
+
+
+        backButton.addActionListener(e -> {
+
+            editProfileFrame.dispose();
+            new Profile(user);
+        });
+/*
+
+        submitButton.addActionListener(e -> {
+
+            DonorController donorController = new DonorController();
+
+            donorController.updateUser(ageTB.getText(), emailTB.getText(), phoneTB.getText(), Objects.requireNonNull(bloodTB.getSelectedItem()).toString());
+            editProfileFrame.dispose();
+            User updateUser = donorController.getUserByName(user.getUserName());
+            updateUser.setUserName(user.getUserName());
+            new Profile(updateUser);
+        });
+
+*/
+
+
+    }
+    public int shiftYValue() {
+        yValue = yValue + 40;
+        return yValue;
+    }
+}
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------
+--  File created - Wednesday-August-24-2022   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table BLOODS
+--------------------------------------------------------
+
+  CREATE TABLE "ROOT"."BLOODS" 
+   (	"DONOR_ID" VARCHAR2(45 BYTE), 
+	"PLATELETCOUNT" NUMBER(*,0), 
+	"HAEMOGLOBIN" FLOAT(126), 
+	"LYMPHOCYTES" NUMBER(*,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+REM INSERTING into ROOT.BLOODS
+SET DEFINE OFF;
+Insert into ROOT.BLOODS (DONOR_ID,PLATELETCOUNT,HAEMOGLOBIN,LYMPHOCYTES) values ('Faruk',222,16,36);
+Insert into ROOT.BLOODS (DONOR_ID,PLATELETCOUNT,HAEMOGLOBIN,LYMPHOCYTES) values ('Goutom',324,16,39);
+Insert into ROOT.BLOODS (DONOR_ID,PLATELETCOUNT,HAEMOGLOBIN,LYMPHOCYTES) values ('Tutul',267,16,37);
+Insert into ROOT.BLOODS (DONOR_ID,PLATELETCOUNT,HAEMOGLOBIN,LYMPHOCYTES) values ('Rakibul',233,16,33);
+--------------------------------------------------------
+--  DDL for Index BLOODS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ROOT"."BLOODS_PK" ON "ROOT"."BLOODS" ("DONOR_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  Constraints for Table BLOODS
+--------------------------------------------------------
+
+  ALTER TABLE "ROOT"."BLOODS" MODIFY ("HAEMOGLOBIN" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."BLOODS" MODIFY ("PLATELETCOUNT" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."BLOODS" MODIFY ("DONOR_ID" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."BLOODS" ADD CONSTRAINT "BLOODS_PK" PRIMARY KEY ("DONOR_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------
+--  File created - Wednesday-August-24-2022   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table USERSB
+--------------------------------------------------------
+
+  CREATE TABLE "ROOT"."USERSB" 
+   (	"USER_ID" NUMBER(*,0) DEFAULT 110, 
+	"USERNAME" VARCHAR2(20 BYTE), 
+	"PASSWORD" VARCHAR2(20 BYTE), 
+	"ROLE" VARCHAR2(20 BYTE), 
+	"AGE" VARCHAR2(20 BYTE), 
+	"EMAIL" VARCHAR2(20 BYTE), 
+	"PHONE" VARCHAR2(20 BYTE), 
+	"BLOODGROUP" VARCHAR2(20 BYTE), 
+	"ELIGIBILITY" VARCHAR2(20 BYTE), 
+	"LASTBLOOD" VARCHAR2(20 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+REM INSERTING into ROOT.USERSB
+SET DEFINE OFF;
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (110,'Rakibul','1234567','Donor','24','rakibul@gmail.com','01708119668','AB+','YES','2022-08-24');
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (101,'DEBORAJ','12345','Donor','22','deboraj@email.com','01708119559','O+','YES',null);
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (102,'ABUR RAHMAN','09876','Patient','23','abdur@email.com','01709119449','A+','YES',null);
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (110,'ABUR_RAHMAN2','ABUR_RAHMAN2','Donor','ABUR_RAHMAN2','ABUR_RAHMAN2','ABUR_RAHMAN2','A+','YES',null);
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (110,'Tutul','13579','Patient','25','tutul@gmail.com','01809875322','O+','NO','2022-08-24');
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (110,'Goutom','1234567','Donor','24','goutom@gmail.com','01301709193','AB+','NO','2022-08-24');
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (110,'Binty','Binty','Donor','22','Binty@email.com','09876543456789','A+','YES',null);
+Insert into ROOT.USERSB (USER_ID,USERNAME,PASSWORD,ROLE,AGE,EMAIL,PHONE,BLOODGROUP,ELIGIBILITY,LASTBLOOD) values (110,'Faruk','Faruk','Donor','24','faruk@emailcom','01937383233','B+','NO','2022-08-24');
+--------------------------------------------------------
+--  DDL for Index USERSB_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ROOT"."USERSB_PK" ON "ROOT"."USERSB" ("USERNAME") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  Constraints for Table USERSB
+--------------------------------------------------------
+
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("BLOODGROUP" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("PHONE" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("EMAIL" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("AGE" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("ROLE" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("PASSWORD" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" MODIFY ("USERNAME" NOT NULL ENABLE);
+  ALTER TABLE "ROOT"."USERSB" ADD CONSTRAINT "USERSB_PK" PRIMARY KEY ("USERNAME")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+
+
+
+
+
