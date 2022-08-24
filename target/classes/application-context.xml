@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <!--
-        <bean id="dataSource" class="com.mysql.cj.jdbc.MysqlDataSource">
-            <property name="databaseName" value="my_app" />
-            <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
-            <property name="user" value="root" />
-            <property name="password" value="root" />
-        </bean>-->
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+<!--
+    <bean id="dataSource" class="com.mysql.cj.jdbc.MysqlDataSource">
+        <property name="databaseName" value="lamb_db"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/lamb_db" />
+        <property name="user" value="root"/>
+        <property name="password" value="root" />
+    </bean>-->
 
 
     <bean id="dataSource" class="oracle.jdbc.datasource.impl.OracleDataSource">
@@ -17,21 +18,12 @@
         <property name="password" value="root" />
     </bean>
 
-
- <!--   <persistence-unit name="junit">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>org.openxava.web.editors.DiscussionComment</class>
-        <properties>
-            <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
-            <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="ao49fmsk"/>
-            <property name="hibernate.default_schema" value="invoicing"/>
-            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@localhost:1521:mysid"/>
-        </properties>
-    </persistence-unit>-->
-
-    <bean id="userDao" class="org.example.dao.UserDao">
-        <constructor-arg ref="dataSource" />
+    <bean id="userDao" class="org.example.model.dao.UserDao">
+        <constructor-arg ref="dataSource"/>
     </bean>
+
+    <bean id="bloodDao" class="org.example.model.dao.BloodDao">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
 </beans>
