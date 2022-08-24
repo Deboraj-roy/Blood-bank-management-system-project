@@ -1,0 +1,281 @@
+
+SELECT *
+FROM BLOODS
+
+
+SELECT *
+FROM USERSB
+
+select 
+ DONOR_ID,
+ PLATELETCOUNT,
+ HAEMOGLOBIN,
+ LYMPHOCYTES
+ from BLOODS
+
+
+
+select 
+ USER_ID,
+ USERNAME,
+ PASSWORD,
+ ROLE,
+ AGE,
+ EMAIL,
+ PHONE,
+ BLOODGROUP,
+ ELIGIBILITY,
+ LASTBLOOD
+ from USERSB
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+Search
+----------
+
+
+DECLARE
+    
+   MAIL USERSB.EMAIL%TYPE :=:ENTER_EMAIL;
+   PASS USERSB.PASSWORD%TYPE;
+   BLOODGP USERSB.BLOODGROUP%TYPE;
+   PHON  USERSB.PHONE%TYPE;
+ 
+BEGIN  
+   SELECT PASSWORD, BLOODGROUP, PHONE INTO PASS, BLOODGP, PHON FROM USERSB WHERE EMAIL = MAIL ; 
+ 
+   DBMS_OUTPUT.PUT_LINE('PHONE : ' || PHON);
+   DBMS_OUTPUT.PUT_LINE('BLOOD GROUP : ' || BLOODGP);
+   DBMS_OUTPUT.PUT_LINE('PASSWORD : ' || PASS); 
+END;
+
+
+
+-----------------------
+Search
+----------
+
+DECLARE
+    
+   MAIL USERSB.EMAIL%TYPE :=:EMAIL;
+   PASS USERSB.PASSWORD%TYPE;
+   PHN  USERSB.PHONE%TYPE;
+   BDGP USERSB.BLOODGROUP%TYPE;
+ 
+BEGIN  
+   SELECT PASSWORD, PHONE, BLOODGROUP INTO PASS, PHN, BDGP FROM USERSB WHERE EMAIL = MAIL ; 
+ 
+   DBMS_OUTPUT.PUT_LINE('PHONE : ' || PHN);
+   DBMS_OUTPUT.PUT_LINE('BLOOD GROUP : ' || BDGP );
+   DBMS_OUTPUT.PUT_LINE('PASSWORD : ' || PASS); 
+END;
+
+
+----------
+tutul@gmail.com
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+Search
+----------
+
+DECLARE
+    
+   DONOR BLOODS.DONOR_ID%TYPE :=:DONORID;
+   PLATELET BLOODS.PLATELETCOUNT%TYPE;
+   HAEMOGLOB BLOODS.HAEMOGLOBIN%TYPE; 
+ 
+BEGIN  
+   SELECT PLATELETCOUNT, HAEMOGLOBIN INTO PLATELET, HAEMOGLOB FROM BLOODS WHERE DONOR_ID=DONOR ; 
+ 
+   DBMS_OUTPUT.PUT_LINE('PLATELET COUNT: ' || PLATELET);
+   DBMS_OUTPUT.PUT_LINE('HAEMOGLOBIN : ' || HAEMOGLOB);
+END;
+
+----------
+Tutul
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+1. Sunday - Sun.	2. Monday - Mon.
+3. Tuesday - Tu., Tue., or Tues.	4. Wednesday - Wed.
+5. Thursday - Th., Thu., Thur., or Thurs.	6. Friday - Fri.
+7. Saturday - Sat.
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+TRIGGER 
+----------
+
+
+CREATE OR REPLACE TRIGGER USERSBR BEFORE INSERT OR UPDATE OR DELETE ON USERSB
+ 
+BEGIN
+IF TO_CHAR(SYSDATE,'HH24') NOT BETWEEN '8' AND '15' OR TO_CHAR(SYSDATE,'DAY') IN ('FRI','SAT') THEN
+RAISE_APPLICATION_ERROR(-20202, 'PLEASE COME IN NAGGABLE HOUR');
+      END IF;
+
+END;
+
+
+
+AFTER TRIGGER USERSBR DISABLE
+AFTER TRIGGER USERSBR ENABLE
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+TRIGGER 
+----------
+
+
+
+CREATE OR REPLACE TRIGGER BLOODSR BEFORE INSERT OR UPDATE OR DELETE ON BLOODS
+ 
+BEGIN
+IF TO_CHAR(SYSDATE,'HH24') NOT BETWEEN '8' AND '15' OR TO_CHAR(SYSDATE,'DAY') IN ('FRI','SAT') THEN
+RAISE_APPLICATION_ERROR(-20202, 'PLEASE COME IN NAGGABLE HOUR');
+      END IF;
+
+END;
+
+
+
+AFTER TRIGGER BLOODSR DISABLE
+AFTER TRIGGER BLOODSR ENABLE
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE OR REPLACE TRIGGER BLOODSR BEFORE INSERT OR UPDATE OR DELETE ON BLOODS
+ 
+BEGIN
+IF TO_CHAR(SYSDATE,'HH24') NOT BETWEEN '5' AND '15' OR TO_CHAR(SYSDATE,'DAY') IN ('FRI','SAT') THEN
+RAISE_APPLICATION_ERROR(-20202, 'PLEASE COME IN NAGGABLE HOUR');
+      END IF;
+
+END;
+
+
+
+AFTER TRIGGER BLOODSR DISABLE
+AFTER TRIGGER BLOODSR ENABLE
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+EXCEPTION 
+-------------
+DECLARE 
+
+   DONOR BLOODS.DONOR_ID%TYPE :=:DONORID;
+   PLATELET BLOODS.PLATELETCOUNT%TYPE;
+   HAEMOGLOB BLOODS.HAEMOGLOBIN%TYPE; 
+
+BEGIN 
+   SELECT PLATELETCOUNT, HAEMOGLOBIN INTO PLATELET, HAEMOGLOB FROM BLOODS WHERE DONOR_ID=DONOR ; 
+
+   DBMS_OUTPUT.PUT_LINE ('PLATELETCOUNT: '||  PLATELET ); 
+   DBMS_OUTPUT.PUT_LINE ('HAEMOGLOBININTO : ' || HAEMOGLOB ); 
+
+EXCEPTION 
+   WHEN no_data_found THEN 
+      dbms_output.put_line('No such USER HERE!'); 
+   WHEN others THEN 
+      dbms_output.put_line('Error!'); 
+END; 
+
+----------------------------------------------------------------------------------------------------------------------------------------
+PROCEDURE 
+----------
+
+
+CREATE OR REPLACE PROCEDURE ADDBLOOD(DONOR IN BLOODS.DONOR_ID%TYPE,PLATELET IN BLOODS.PLATELETCOUNT%TYPE, HAEMOGLOB IN BLOODS.HAEMOGLOBIN%TYPE, LYMPHOCYTE IN BLOODS.LYMPHOCYTES%TYPE)    
+IS    
+BEGIN    
+INSERT INTO BLOODS VALUES(DONOR,PLATELET,HAEMOGLOB,LYMPHOCYTE);    
+END;    
+
+
+
+BEGIN    
+   ADDBLOOD('RAHUL',394,16.2,32);  
+   DBMS_OUTPUT.PUT_LINE('RECORD INSERTED SUCCESSFULLY');    
+END;
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+create or replace trigger emp_score before insert or update or delete on emp
+
+begin 
+if to_char(sysdate,'hh24") not between '8' and '15' or to_char(sysdate,DAY) in ('FRI','SAT') then
+raise_application_error(-20202, 'Please Come in naggable hour');
+      end if;
+end;
+
+after trigger emp_score disable
+after trigger emp_score enable
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
